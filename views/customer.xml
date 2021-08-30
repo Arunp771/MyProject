@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_customer_kanban" model="ir.ui.view">
+        <field name="name">travel.customer.kanban</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="sourcelocation"/>
+                <field name="destinationlocation"/>
+                <field name="numberofpassengers"/>
+                <field name="service_id"/>
+                <field name="date"/>
+                <field name="note"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <ul>
+                                    <li>
+                                        NAME:
+                                        <field name="responsible_id"/>
+                                    </li>
+                                    <li>
+                                        Source location:
+                                        <field name="sourcelocation"/>
+                                    </li>
+                                    <li>
+                                        Destination location:
+                                        <field name="destinationlocation"/>
+                                    </li>
+
+                                    <li>
+                                        Number of passengers:
+                                        <field name="numberofpassengers"/>
+                                    </li>
+                                    <li>
+                                        Service:
+                                        <field name="service_id"/>
+                                    </li>
+                                    <li>
+                                        Date:
+                                        <field name="date"/>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="customer_tree" model="ir.ui.view">
+        <field name="name">travel.customer.tree</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference"/>
+                <field name="responsible_id"/>
+                <field name="numberofpassengers"/>
+                <field name="service_id"/>
+                <field name="sourcelocation" optional="show"/>
+                <field name="destinationlocation" optional="show"/>
+                <field name="date"/>
+
+                <field name="state" optional="show"/>
+
+
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_customer_form" model="ir.ui.view">
+        <field name="name">travel.customer.form</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="customer_request" string="confirm"
+                            type="object" states="draft" class="btn-primary"/>
+
+                    <field name="state" widget="statusbar"
+                           options="{'clickable': '1'}"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+
+                            <field name="responsible_id"/>
+                            <field name="sourcelocation"/>
+                            <field name="destinationlocation"/>
+                            <field name="numberofpassengers"/>
+                        </group>
+                        <group>
+                            <field name="service_id"/>
+                            <field name="date"/>
+
+                            <field name="note"/>
+                            <field name="expiration_date"
+                                   attrs="{'invisible': [('state', 'in', ['customer', 'confirm','expire','done'])]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_action" model="ir.actions.act_window">
+        <field name="name">customer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">travel.customer</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'search_default_date':1,
+            'search_default_draft':1, 'search_default_done':1,
+            'search_default_confirm':1}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first customer!
+            </p>
+        </field>
+    </record>
+
+    <record id="view_customer_search" model="ir.ui.view">
+        <field name="name">travel.customer.search</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <search string="customer">
+                <field name="name"/>
+                <field name="reference"/>
+                <separator/>
+                <filter string="expire" name="expire"
+                        domain="[('state', '=', 'expire')]"/>
+                <filter string="draft" name="draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="done" name="done"
+                        domain="[('state', '=', 'done')]"/>
+                <filter string="confirm" name="confirm"
+                        domain="[('state', '=', 'done')]"/>
+                <filter string="flight" name="flight"
+                        domain="[('service_id', '=', 'flight')]"/>
+                <filter string="train" name="train"
+                        domain="[('service_id', '=', 'train')]"/>
+                <filter string="bus" name="bus"
+                        domain="[('service_id', '=', 'bus')]"/>
+
+                <group expand="1" string="Group By">
+                    <filter string="service_id" name="service_id"
+                            context="{'group_by':'service_id'}"/>
+                    <filter string="date" name="date"
+                            context="{'group_by':'date'}"/>
+                    <filter string="destinationlocation"
+                            name="destinationlocation"
+                            context="{'group_by':'destinationlocation'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <menuitem id="travel_root"
+              name="Travel"
+              sequence="2"/>
+
+    <menuitem id="travel_customer_root"
+              name="Booking"
+              parent="travel_root"
+              sequence="2"/>
+    <menuitem id="travel_customer"
+              name="Customer"
+              parent="travel_customer_root"
+              action="customer_action"
+              sequence="2"/>
+
+</odoo>

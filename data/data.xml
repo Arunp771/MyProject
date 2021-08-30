@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="tour_package" model="travel.service">
+            <field name="name">Tour Package</field>
+            <field name="eperiod">20</field>
+
+        </record>
+
+    </data>
+</odoo>
