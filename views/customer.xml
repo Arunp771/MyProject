@@ -102,6 +102,7 @@
                             <field name="sourcelocation"/>
                             <field name="destinationlocation"/>
                             <field name="numberofpassengers"/>
+                            <field name="vehicle"/>
                         </group>
                         <group>
                             <field name="service_id"/>
@@ -112,6 +113,22 @@
                                    attrs="{'invisible': [('state', 'in', ['customer', 'confirm','expire','done'])]}"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Estimation Amount">
+                            <field name="travel_id">
+                                <tree create="0" delete="0" edit="0">
+                                    <field name="service_id"/>
+<!--                                    <field name="quantity"/>-->
+                                    <field name="vehiclecharges"/>
+<!--                                    <field name="unit"/>-->
+<!--                                    <field name="subtotal"-->
+<!--                                           sum="total of sub total"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
@@ -187,6 +204,11 @@
               name="Customer"
               parent="travel_customer_root"
               action="customer_action"
-              sequence="2"/>
+              sequence="2" groups="travel.group_manager_user"/>
+     <menuitem id="travel_customer"
+              name="Customer"
+              parent="travel_customer_root"
+              action="customer_action"
+              sequence="2" groups="travel.group_travel_user"/>
 
 </odoo>

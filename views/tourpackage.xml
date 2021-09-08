@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+     <record id="package_tree" model="ir.ui.view">
+        <field name="name">travel.package.tree</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="responsible_id"/>
+
+            </tree>
+        </field>
+    </record>
+    <record id="package_calendar" model="ir.ui.view">
+        <field name="name">travel.package.calendar</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <calendar string="package calendar" date_start="startdate"
+                      color="responsible_id">
+                <field name="responsible_id"/>
+                <field name="startdate"/>
+            </calendar>
+        </field>
+    </record>
+
+
+    <record id="package_form" model="ir.ui.view">
+        <field name="name">travel.package.form</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="package_request" string="confirm"
+                            type="object" states="draft" class="btn-primary"/>
+
+                    <field name="state" widget="statusbar"
+                           options="{'clickable': '1'}"/>
+                    <button name="return_request" string="return"
+                            type="object" states="confirm" class="btn-primary"/>
+
+                </header>
+<!--                <div role="alert" class="alert alert-danger"-->
+<!--                     style="height:40px , width=30px , margin-bottom:1px;"-->
+<!--                     attrs="{'invisible':[('warning=False)]}">-->
+<!--                    THIS NNNNNNNNNNNNNNNNNN-->
+<!--                </div>-->
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="responsible_id"/>
+                            <field name="Quotationdate"/>
+                            <field name="sourcelocation"/>
+
+                        </group>
+                        <group>
+                            <field name="destinationlocation"/>
+                            <field name="startdate"/>
+                            <field name="endtdate"/>
+                            <field name="ntravelers"/>
+                            <field name="facilities"/>
+                            <field name="vehicle"/>
+                            <field name="vehicletypes"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Estimation" name="vehicle_charges">
+                               <p>Estimated KM</p>
+                                <field name = "estimatedkm"/>
+
+                            <field name="estimation_ids" >
+                                <tree editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="quantity"/>
+                                    <field name="vehiclecharges"/>
+                                    <field name="unit"/>
+                                    <field name="subtotal" sum ="total of sub total"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record id="package_action" model="ir.actions.act_window">
+        <field name="name">Tour packages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">travel.package</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="context">{'search_default_date':1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first service!
+            </p>
+        </field>
+    </record>
+    <menuitem id="travel_root"
+              name="Travel"
+              sequence="2"/>
+    <menuitem id="travel_package_root"
+              name="package"
+              parent="travel_root"
+              action="package_action"
+              sequence="2"/>
+</odoo>

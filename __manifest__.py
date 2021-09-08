@@ -10,11 +10,13 @@
     'depends': ['sale','mail'],
     'data': [
         'security/ir.model.access.csv',
+        'security/securitytravel.xml',
         'data/sequence.xml',
         'data/data.xml',
         'data/service_cron.xml',
          'views/customer.xml',
          'views/sale.xml',
+         'views/tourpackage.xml',
         'views/configuration.xml'
 
     ],
